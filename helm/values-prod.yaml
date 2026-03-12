@@ -1,0 +1,39 @@
+# Production environment overrides
+# Apply with: helm upgrade --install ... -f values.yaml -f values-prod.yaml --set image.tag=$IMAGE_SHA
+
+replicaCount: 2
+
+image:
+  # Always set image.tag explicitly at deploy time:
+  # --set image.tag=$IMAGE_SHA
+  pullPolicy: Always
+
+namespace: production
+
+ingress:
+  host: healthcheck.prod.example.com
+  limitRps: "50"
+  limitConnections: "20"
+  tls:
+    enabled: true
+    secretName: k8s-gateway-healthcheck-tls
+    # Set to your cert-manager ClusterIssuer name, or leave empty to use a manually provisioned secret
+    certManagerIssuer: "letsencrypt-prod"
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+
+topologySpreadConstraints:
+  enabled: true
+
+podAntiAffinity:
+  enabled: true
+
+podAnnotations:
+  prometheus.io/scrape: "false"
+  environment: production

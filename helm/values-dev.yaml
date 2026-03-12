@@ -1,0 +1,41 @@
+# Dev environment overrides
+# Apply with: helm upgrade --install ... -f values.yaml -f values-dev.yaml
+
+replicaCount: 1
+
+image:
+  tag: "latest"
+  pullPolicy: Always
+
+namespace: dev
+
+ingress:
+  host: healthcheck.dev.example.com
+  limitRps: "200"
+  limitConnections: "50"
+  tls:
+    enabled: false
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+  limits:
+    cpu: 50m
+    memory: 64Mi
+
+# Single-node dev clusters (Docker Desktop, kind) don't have multiple zones
+topologySpreadConstraints:
+  enabled: false
+
+podAntiAffinity:
+  enabled: false
+
+startupProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  failureThreshold: 20
+
+podAnnotations:
+  prometheus.io/scrape: "false"
+  environment: dev

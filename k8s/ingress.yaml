@@ -1,0 +1,76 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-gateway-healthcheck
+  namespace: epdi-tooling           # adjust to your target namespace
+  labels:
+    app: k8s-gateway-healthcheck
+    app.kubernetes.io/name: k8s-gateway-healthcheck
+    app.kubernetes.io/component: healthcheck
+  annotations:
+    # ── NGINX ingress controller ───────────────────────────────────────────
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+
+    # Rate limiting — prevent probe storms
+    nginx.ingress.kubernetes.io/limit-rps: "50"
+    nginx.ingress.kubernetes.io/limit-connections: "20"
+
+    # Response caching for /healthz (very short — probes are frequent)
+    # Disable caching on full /health for accurate real-time status
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+
+    # Security headers
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header X-Frame-Options "DENY" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header Referrer-Policy "no-referrer" always;
+
+    # SSL/TLS — enable if your cluster has cert-manager
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+spec:
+  # Uncomment if using TLS termination at ingress
+  # tls:
+  #   - hosts:
+  #       - healthcheck.internal.yourdomain.com
+  #     secretName: k8s-gateway-healthcheck-tls
+
+  rules:
+    - host: healthcheck.internal.yourdomain.com   # replace with your internal DNS
+      http:
+        paths:
+          # Public health endpoints (used by App Gateway backend health probe)
+          - path: /healthz
+            pathType: Exact
+            backend:
+              service:
+                name: k8s-gateway-healthcheck
+                port:
+                  name: http
+
+          - path: /readyz
+            pathType: Exact
+            backend:
+              service:
+                name: k8s-gateway-healthcheck
+                port:
+                  name: http
+
+          - path: /startupz
+            pathType: Exact
+            backend:
+              service:
+                name: k8s-gateway-healthcheck
+                port:
+                  name: http
+
+          # Full health — restrict to internal monitoring only if needed
+          - path: /health
+            pathType: Exact
+            backend:
+              service:
+                name: k8s-gateway-healthcheck
+                port:
+                  name: http

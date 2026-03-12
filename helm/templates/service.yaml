@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "k8s-gateway-healthcheck.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "k8s-gateway-healthcheck.commonLabels" . | nindent 4 }}
+  annotations:
+    # Required by Azure App Gateway Ingress Controller (AGIC) for backend health probing
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/"
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    {{- include "k8s-gateway-healthcheck.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP

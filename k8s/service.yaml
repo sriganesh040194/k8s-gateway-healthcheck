@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-gateway-healthcheck
+  namespace: epdi-tooling           # adjust to your target namespace
+  labels:
+    app: k8s-gateway-healthcheck
+    app.kubernetes.io/name: k8s-gateway-healthcheck
+    app.kubernetes.io/component: healthcheck
+  annotations:
+    # Required by Azure App Gateway Ingress Controller (AGIC) for backend health
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/"
+spec:
+  type: ClusterIP                   # AGIC/NGINX handles external exposure via Ingress
+  selector:
+    app: k8s-gateway-healthcheck
+  ports:
+    - name: http
+      port: 80
+      targetPort: http              # references containerPort name "http" = 8080
+      protocol: TCP
