@@ -8,5 +8,7 @@ keywords:
   - healthcheck
   - gateway
   - kubernetes
+home: https://github.com/sriganesh040194/k8s-gateway-healthcheck
 maintainers:
   - name: Sriganesh Karuppannan
+    url: https://github.com/sriganesh040194

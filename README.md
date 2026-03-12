@@ -4,12 +4,12 @@
 
 **Enterprise-grade Go healthcheck service for Kubernetes & Azure App Gateway**
 
-[![Build & Release](https://github.com/sriganeshk/k8s-gateway-healthcheck/actions/workflows/ci.yml/badge.svg)](https://github.com/sriganeshk/k8s-gateway-healthcheck/actions/workflows/ci.yml)
+[![Build & Release](https://github.com/sriganesh040194/k8s-gateway-healthcheck/actions/workflows/ci.yml/badge.svg)](https://github.com/sriganesh040194/k8s-gateway-healthcheck/actions/workflows/ci.yml)
 [![Go 1.23](https://img.shields.io/badge/Go-1.23-00ADD8?logo=go)](https://golang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![ghcr.io](https://img.shields.io/badge/ghcr.io-k8s--gateway--healthcheck-blue?logo=github)](https://ghcr.io/sriganeshk/k8s-gateway-healthcheck)
+[![ghcr.io](https://img.shields.io/badge/ghcr.io-k8s--gateway--healthcheck-blue?logo=github)](https://ghcr.io/sriganesh040194/k8s-gateway-healthcheck)
 
-*Vibe coded by [Sriganesh Karuppannan](https://github.com/sriganeshk)*
+*Vibe coded by [Sriganesh Karuppannan](https://github.com/sriganesh040194)*
 
 </div>
 
@@ -70,9 +70,9 @@ A lightweight, zero-dependency Go service that exposes Kubernetes-native health 
 ### Run locally
 
 ```bash
-docker pull ghcr.io/sriganeshk/k8s-gateway-healthcheck:latest
+docker pull ghcr.io/sriganesh040194/k8s-gateway-healthcheck:edge
 
-docker run -p 8080:8080 ghcr.io/sriganeshk/k8s-gateway-healthcheck:latest
+docker run -p 8080:8080 ghcr.io/sriganesh040194/k8s-gateway-healthcheck:edge
 
 curl http://localhost:8080/health
 ```
@@ -80,7 +80,7 @@ curl http://localhost:8080/health
 ### Build from source
 
 ```bash
-git clone https://github.com/sriganeshk/k8s-gateway-healthcheck.git
+git clone https://github.com/sriganesh040194/k8s-gateway-healthcheck.git
 cd k8s-gateway-healthcheck
 
 docker build -t k8s-gateway-healthcheck:latest .
@@ -186,4 +186,4 @@ func (c *Checker) checkDatabase(ctx context.Context) Check {
 
 ## License
 
-[MIT](LICENSE) © [Sriganesh Karuppannan](https://github.com/sriganeshk)
+[MIT](LICENSE) © [Sriganesh Karuppannan](https://github.com/sriganesh040194)
